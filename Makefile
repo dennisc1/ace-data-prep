@@ -9,8 +9,6 @@ JAVAIN = export CLASSPATH=`mvn -f ./scripts/maven/pom-acex3.xml exec:exec -q -De
 # JAVAIN = export CLASSPATH=`mvn -f /mnt/d/MyProjects/acex3/pom.xml exec:exec -q -Dexec.executable="echo" -Dexec.args="%classpath"` && java
 JAVACS = export CLASSPATH=`mvn -f ./scripts/maven/pom-cs.xml exec:exec -q -Dexec.executable="echo" -Dexec.args="%classpath"` && java
 PYTHON = python
-JAVAFLAGS = -ea
-
 CONCRETE_CHUNKLINK=./concrete-chunklink
 
 # Machine specific parameters.
@@ -26,7 +24,6 @@ ifndef OUT_DIR
 $(error The variable OUT_DIR should be defined on the command line)
 endif
 #######
-endif
 
 # ACE 2005 variables.
 ACE_OUT_DIR=$(abspath $(OUT_DIR))
@@ -36,8 +33,9 @@ LDC2006T06_EN_SYM=$(ACE_OUT_DIR)/LDC2006T06_temp_copy
 ACE05_COMMS=$(ACE_OUT_DIR)/ace-05-comms
 ACE05_ANNO=$(ACE_OUT_DIR)/ace-05-comms-ptb-anno
 ACE05_CHUNK=$(ACE_OUT_DIR)/ace-05-comms-ptb-anno-chunks
-ACE05_SPLITS=$(ACE_OUT_DIR)/ace-05-splits
-APF_XML_FILES =$(notdir $(wildcard $(LDC2006T06_EN)/*/adj/*.apf.xml)) 
+ACE05_JSON=$(ACE_OUT_DIR)/ace-05-json
+ACE05_BRAT=$(ACE_OUT_DIR)/ace-05-brat
+APF_XML_FILES =$(notdir $(wildcard $(LDC2006T06_EN)/*/timex2norm/*.apf.xml))
 
 .PHONY: all
 all: 
@@ -73,7 +71,7 @@ $(LDC2006T06_EN_SYM)/apf.v5.1.1.dtd: $(LDC2006T06)/dtd/apf.v5.1.1.dtd
 
 # Create a flat symlinks only copy of the LDC directory.
 # (This is done so that we can move the dtd files into the correct place.)
-$(LDC2006T06_EN_SYM)/%.apf.xml: $(LDC2006T06_EN)/*/adj/%.apf.xml $(LDC2006T06_EN)/*/adj/%.sgm
+$(LDC2006T06_EN_SYM)/%.apf.xml: $(LDC2006T06_EN)/*/timex2norm/%.apf.xml $(LDC2006T06_EN)/*/timex2norm/%.sgm
 	mkdir -p $(dir $@)
 	ln -s $^ $(dir $@) || true
 
@@ -92,6 +90,16 @@ $(ACE05_CHUNK)/%.concrete : $(ACE05_ANNO)/%.concrete $(CONCRETE_CHUNKLINK)
 	mkdir -p $(ACE05_CHUNK)
 	$(PYTHON) $(CONCRETE_CHUNKLINK)/concrete_chunklink/add_chunks.py --chunklink $(CONCRETE_CHUNKLINK)/scripts/chunklink_2-2-2000_for_conll.pl $< $@
 
+#TODO
+#$(ACE05_JSON)/%.json : $(ACE05_CHUNK)/%.concrete
+#	mkdir -p $(ACE05_JSON)
+#    $(PYTHON) ./json-dataconverter/concrete2json.py $< $@
+
+#TODO
+#$(ACE05_BRAT)/%.xxxx : $(ACE05_CHUNK)/%.concrete
+#	mkdir -p $(ACE05_BRAT)
+#    $(PYTHON) ./brat-dataconverter/concrete2brat.py $< $@
+
 # Converts all the ACE 2005 data to Concrete Communications.
 .PHONY: ace05comms
 ace05comms: $(addprefix $(ACE05_COMMS)/,$(subst .apf.xml,.concrete,$(APF_XML_FILES)))
@@ -100,10 +108,8 @@ ace05comms: $(addprefix $(ACE05_COMMS)/,$(subst .apf.xml,.concrete,$(APF_XML_FIL
 .PHONY: ace05anno
 ace05anno: $(addprefix $(ACE05_CHUNK)/,$(subst .apf.xml,.concrete,$(APF_XML_FILES)))
 
-# Split the annotated ACE Concrete files into domains.
 .PHONY: ace05splits
 ace05splits: $(LDC2006T06) ace05anno
-	bash ./scripts/data/split_ace_dir.sh $(LDC2006T06) $(ACE05_CHUNK) $(ACE05_SPLITS)/comms concrete
 
 # Don't delete intermediate files.
 .SECONDARY:

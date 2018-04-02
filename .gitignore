@@ -13,3 +13,5 @@
 /java.hprof.txt
 concrete-chunklink/
 *.pyc
+*.log
+.idea/
