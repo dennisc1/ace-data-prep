@@ -11,3 +11,5 @@
 /.settings
 /.classpath
 /java.hprof.txt
+concrete-chunklink/
+*.pyc
