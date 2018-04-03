@@ -5,8 +5,8 @@
 #
 
 SHELL = /bin/bash
-JAVAIN = export CLASSPATH=`mvn -f ./scripts/maven/pom-acex3.xml exec:exec -q -Dexec.executable="echo" -Dexec.args="%classpath"` && java
-# JAVAIN = export CLASSPATH=`mvn -f /mnt/d/MyProjects/acex3/pom.xml exec:exec -q -Dexec.executable="echo" -Dexec.args="%classpath"` && java
+# JAVAIN = export CLASSPATH=`mvn -f ./scripts/maven/pom-acex3.xml exec:exec -q -Dexec.executable="echo" -Dexec.args="%classpath"` && java
+JAVAIN = export CLASSPATH=`mvn -f /mnt/d/MyProjects/acex3/pom.xml exec:exec -q -Dexec.executable="echo" -Dexec.args="%classpath"` && java
 JAVACS = export CLASSPATH=`mvn -f ./scripts/maven/pom-cs.xml exec:exec -q -Dexec.executable="echo" -Dexec.args="%classpath"` && java
 PYTHON = python
 CONCRETE_CHUNKLINK=./concrete-chunklink
@@ -90,12 +90,12 @@ $(ACE05_CHUNK)/%.concrete : $(ACE05_ANNO)/%.concrete $(CONCRETE_CHUNKLINK)
 	mkdir -p $(ACE05_CHUNK)
 	$(PYTHON) $(CONCRETE_CHUNKLINK)/concrete_chunklink/add_chunks.py --chunklink $(CONCRETE_CHUNKLINK)/scripts/chunklink_2-2-2000_for_conll.pl $< $@
 
-#TODO
-#$(ACE05_JSON)/%.json : $(ACE05_CHUNK)/%.concrete
-#	mkdir -p $(ACE05_JSON)
-#    $(PYTHON) ./json-dataconverter/concrete2json.py $< $@
-
-#TODO
+# Converts the concrete format to easy-to-read json.
+$(ACE05_JSON)/%.json : $(ACE05_CHUNK)/%.concrete
+	mkdir -p $(ACE05_JSON)
+	$(PYTHON) ./json-dataconverter/concrete2json.py $< $@
+	
+# TODO
 #$(ACE05_BRAT)/%.xxxx : $(ACE05_CHUNK)/%.concrete
 #	mkdir -p $(ACE05_BRAT)
 #    $(PYTHON) ./brat-dataconverter/concrete2brat.py $< $@
@@ -108,8 +108,13 @@ ace05comms: $(addprefix $(ACE05_COMMS)/,$(subst .apf.xml,.concrete,$(APF_XML_FIL
 .PHONY: ace05anno
 ace05anno: $(addprefix $(ACE05_CHUNK)/,$(subst .apf.xml,.concrete,$(APF_XML_FILES)))
 
+# Annotates all of the ACE 2005 data with Stanford tools and chunklink.pl, then transform to json.
+.PHONY: ace05json
+ace05json: $(addprefix $(ACE05_JSON)/,$(subst .apf.xml,.json,$(APF_XML_FILES)))
+
+# All entrance
 .PHONY: ace05splits
-ace05splits: $(LDC2006T06) ace05anno
+ace05splits: $(LDC2006T06) ace05json
 
 # Don't delete intermediate files.
 .SECONDARY:
