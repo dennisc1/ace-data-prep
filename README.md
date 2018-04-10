@@ -1,7 +1,6 @@
 # ACE 2005 Event Extraction Data Preprocess
 
 ## Description
-
 This project ties together numerous tools. It converts from the [ACE2005 file format](https://catalog.ldc.upenn.edu/LDC2006T06) (.sgm and .apf.xml files) to Concrete.
 It also annotates the ACE 2005 data using Stanford CoreNLP and the chunklink.pl script from CoNLL-2000.
 By the way, the data is converted to json and [brat](http://brat.nlplab.org/) annotations.
@@ -9,7 +8,8 @@ See below for possible appropriate citations. (Later)
 This project is modified from [this repo](https://github.com/mgormley/ace-data-prep).
 
 The output of the pipeline is available in three formats: Concrete, JSON, and Brat Annotation.
-Concrete is a data serialization format for NLP. See the [primer on Concrete](http://hltcoe.github.io/) for additional details. As a convenience, the output is also converted to an easy-to-parse [Concatenated JSON format](https://en.wikipedia.org/wiki/JSON_Streaming#Concatenated_JSON). This conversion is done by [Pacaya NLP](https://github.com/mgormley/pacaya-nlp). An example sentence is shown below. 
+Concrete is a data serialization format for NLP. See the [primer on Concrete](http://hltcoe.github.io/) for additional details.
+As a convenience, the output is also converted to an easy-to-parse [Concatenated JSON format](https://en.wikipedia.org/wiki/JSON_Streaming#Concatenated_JSON).
 
 A document will be splited into sentences by Stanford CoreNLP and each document will be trnasfered into a new file with the same name prefix.
 Here is a JSON example of a sentence.
@@ -159,15 +159,11 @@ We recommend all users of this pipeline use the files in `ace-05-splits` for goo
 
 ## Convert and Annotate Full Dataset
 
-A Makefile is included to  to convert the full ACE 2005 dataset to
-Concrete. The same Makefile will also add Stanford CoreNLP annotations
-and convert the constituency trees to chunks with chunklink.pl. 
-It will also require install the latest version of concrete-python and
-clone the concrete-chunklink repository. 
+A Makefile is included to  to convert the full ACE 2005 dataset to Concrete.
+The same Makefile will also add Stanford CoreNLP annotations and convert the constituency trees to chunks with chunklink.pl. 
+It will also require install the latest version of concrete-python and clone the concrete-chunklink repository. 
 
-The command below will convert the data to Concrete
-(with AceApf2Concrete), annotate (with Stanford and chunklink.pl), and
-transform the data into JSON and Brat Annotation (with concrete2json.py and json2brat.py).
+The command below will convert the data to Concrete (with AceApf2Concrete), annotate (with Stanford and chunklink.pl), and transform the data into JSON and Brat Annotation (with concrete2json.py and json2brat.py).
 
     make LDC_DIR=<path to LDC dir> \
          OUT_DIR=<path for output dir> \
@@ -176,6 +172,9 @@ transform the data into JSON and Brat Annotation (with concrete2json.py and json
 ## One More Step to Vistualize ACE2005 in Brat
 1. Copy the `ace-05-brat/` to a place under `$BRAT_ROOT$/data/`
 2. Copy the `brat-dataconverter/visual.conf` to `$BRAT_ROOT$`, and of course plesse backup the old one. 
+
+Finally, you can get this view.
+![brat_example](images/brat_example.png)
 
 ## Citations
 Later
