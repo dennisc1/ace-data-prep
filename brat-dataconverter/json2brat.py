@@ -39,7 +39,7 @@ def main():
             entities = sentence_json["golden-entity-mentions"]
             events = sentence_json["golden-event-mentions"]
             text = " ".join(words)
-            out_txt.write(text + "\n")
+            out_txt.write(text.encode("utf-8") + "\n")
             word_char_offset = []
             sentence_char_offset = 0
             for word in words:
@@ -55,13 +55,13 @@ def main():
                 start_sentence_char_offset = word_char_offset[start_token_offset]
                 end_sentence_char_offset = word_char_offset[end_token_offset - 1] + len(words[end_token_offset - 1])
                 entity_no += 1
-                out_ann.write("T%d\t%s %d %d\t%s\n" % (entity_no,
-                                                       entity_type,
-                                                       start_sentence_char_offset + document_char_offset,
-                                                       end_sentence_char_offset + document_char_offset,
-                                                       entity_text))
+                out_ann.write(("T%d\t%s %d %d\t%s\n" % (entity_no,
+                                                        entity_type,
+                                                        start_sentence_char_offset + document_char_offset,
+                                                        end_sentence_char_offset + document_char_offset,
+                                                        entity_text)).encode("utf-8"))
                 entity_pos2label["%d-%d:%s:%s" % (
-                start_token_offset, end_token_offset, entity_text, entity_type)] = "T%d" % entity_no
+                    start_token_offset, end_token_offset, entity_text, entity_type)] = "T%d" % entity_no
 
             for event in events:
                 # for trigger
@@ -73,17 +73,17 @@ def main():
                 start_sentence_char_offset = word_char_offset[start_token_offset]
                 end_sentence_char_offset = word_char_offset[end_token_offset - 1] + len(words[end_token_offset - 1])
                 entity_no += 1
-                out_ann.write("T%d\t%s %d %d\t%s\n" % (entity_no,
-                                                       event_type,
-                                                       start_sentence_char_offset + document_char_offset,
-                                                       end_sentence_char_offset + document_char_offset,
-                                                       trigger_text))
+                out_ann.write(("T%d\t%s %d %d\t%s\n" % (entity_no,
+                                                        event_type,
+                                                        start_sentence_char_offset + document_char_offset,
+                                                        end_sentence_char_offset + document_char_offset,
+                                                        trigger_text)).encode("utf-8"))
                 entity_pos2label["%d-%d:%s:%s" % (
-                start_token_offset, end_token_offset, trigger_text, event_type)] = "T%d" % entity_no
+                    start_token_offset, end_token_offset, trigger_text, event_type)] = "T%d" % entity_no
 
                 # for event
                 event_no += 1
-                out_ann.write("E%d\t%s:T%d" % (event_no, event_type, entity_no))
+                out_ann.write(("E%d\t%s:T%d" % (event_no, event_type, entity_no)).encode("utf-8"))
                 for argument in event["arguments"]:
                     start_token_offset = argument["start"]
                     end_token_offset = argument["end"]
