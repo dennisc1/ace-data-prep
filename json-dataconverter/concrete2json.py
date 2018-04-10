@@ -98,9 +98,9 @@ def comm2json(comm):
         entitySet = comm.entitySetList[entitySet_index]
 
         for entity_index, entity in enumerate(entitySet.entityList):
-            entity_id = u"E%d-%d:" % (entitySet_index, entity_index)
+            entity_id = u"E%d-%d" % (entitySet_index, entity_index)
             for entityMention_index, entityMention in enumerate(entity.mentionList):
-                entitymention_id = "EM %d-%d-%d:" % (entitySet_index, entity_index, entityMention_index)
+                entitymention_id = "EM %d-%d-%d" % (entitySet_index, entity_index, entityMention_index)
                 entityType = entityMention.entityType
                 phraseType = entityMention.phraseType
                 if phraseType == "TRIGGER":
@@ -126,7 +126,7 @@ def comm2json(comm):
         for situation_index, situation in enumerate(situationSet.situationList):
             if situation.mentionList:
                 for situationMention_index, situationMention in enumerate(situation.mentionList):
-                    event_id = u"SM %d-%d-%d:" % (situationSet_index, situation_index, situationMention_index)
+                    event_id = u"SM %d-%d-%d" % (situationSet_index, situation_index, situationMention_index)
                     sentence_index = -1
                     try:
                         sentence_index = find_which_sentence(situationMention.tokens.tokenization, comm)
@@ -163,7 +163,8 @@ def comm2json(comm):
                                     "start": indices[0],
                                     "end": indices[-1] + 1,
                                     "text": u" ".join(get_tokens_for_entityMention(mentionArgument.entityMention)),
-                                    "role": role
+                                    "role": role,
+                                    "entity-type": mentionArgument.entityMention.entityType
                                 }
                                 arguments_json.append(argument_json)
                     if sentence_index != -1:
@@ -181,10 +182,11 @@ def main():
         parser.print_help()
         sys.exit(1)
 
-    # in_path = "/mnt/d/MyProjects/AFP_ENG_20030616.0715.2.concrete"
-    # out_path = "/mnt/d/MyProjects/AFP_ENG_20030616.0715.json"
     in_path = args[1]
     out_path = args[2]
+
+    # in_path = "/mnt/d/MyProjects/AFP_ENG_20030616.0715.2.concrete"
+    # out_path = "/mnt/d/MyProjects/AFP_ENG_20030616.0715.json"
 
     if not os.path.exists(in_path):
         raise Exception("Input path doesn't exist: " + in_path)

@@ -95,10 +95,11 @@ $(ACE05_JSON)/%.json : $(ACE05_CHUNK)/%.concrete
 	mkdir -p $(ACE05_JSON)
 	$(PYTHON) ./json-dataconverter/concrete2json.py $< $@
 	
-# TODO
-#$(ACE05_BRAT)/%.xxxx : $(ACE05_CHUNK)/%.concrete
-#	mkdir -p $(ACE05_BRAT)
-#    $(PYTHON) ./brat-dataconverter/concrete2brat.py $< $@
+# Converts the json files to brat annotations, and copies annotation configure files.
+$(ACE05_BRAT)/%.json.ann $(ACE05_BRAT)/%.json.txt : $(ACE05_JSON)/%.json
+	mkdir -p $(ACE05_BRAT)
+	cp ./brat-dataconverter/annotation.conf $(ACE05_BRAT)/
+	$(PYTHON) ./brat-dataconverter/json2brat.py $< $(ACE05_BRAT)
 
 # Converts all the ACE 2005 data to Concrete Communications.
 .PHONY: ace05comms
@@ -108,13 +109,17 @@ ace05comms: $(addprefix $(ACE05_COMMS)/,$(subst .apf.xml,.concrete,$(APF_XML_FIL
 .PHONY: ace05anno
 ace05anno: $(addprefix $(ACE05_CHUNK)/,$(subst .apf.xml,.concrete,$(APF_XML_FILES)))
 
-# Annotates all of the ACE 2005 data with Stanford tools and chunklink.pl, then transform to json.
+# Annotates all of the ACE 2005 data with Stanford tools and chunklink.pl, then transform to jsons.
 .PHONY: ace05json
 ace05json: $(addprefix $(ACE05_JSON)/,$(subst .apf.xml,.json,$(APF_XML_FILES)))
 
+# Annotates all of the ACE 2005 data with Stanford tools and chunklink.pl, then transform to brat annotations.
+.PHONY: ace05brat
+ace05brat: $(addprefix $(ACE05_BRAT)/,$(subst .apf.xml,.json.ann,$(APF_XML_FILES))) $(addprefix $(ACE05_BRAT)/,$(subst .apf.xml,.json.txt,$(APF_XML_FILES)))
+
 # All entrance
 .PHONY: ace05splits
-ace05splits: $(LDC2006T06) ace05json
+ace05splits: $(LDC2006T06) ace05brat
 
 # Don't delete intermediate files.
 .SECONDARY:
