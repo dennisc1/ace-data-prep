@@ -176,5 +176,60 @@ The command below will convert the data to Concrete (with AceApf2Concrete), anno
 Finally, you can get this view.
 ![brat_example](images/brat_example.png)
 
+## Train/Test/Dev Split
+The files used in train/test/development set is in the folder `qi_filelist` which is the same in (Ji et al., 2008; Li et al., 2013;  Feng et al., 2016).
+```bibtex
+@inproceedings{DBLP:conf/acl/JiG08,
+  author    = {Heng Ji and
+               Ralph Grishman},
+  title     = {Refining Event Extraction through Cross-Document Inference},
+  booktitle = {{ACL} 2008, Proceedings of the 46th Annual Meeting of the Association
+               for Computational Linguistics, June 15-20, 2008, Columbus, Ohio, {USA}},
+  pages     = {254--262},
+  year      = {2008},
+  crossref  = {DBLP:conf/acl/2008},
+  url       = {http://www.aclweb.org/anthology/P08-1030},
+  timestamp = {Mon, 04 Mar 2013 20:57:25 +0100},
+  biburl    = {https://dblp.org/rec/bib/conf/acl/JiG08},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{DBLP:conf/acl/LiJH13,
+  author    = {Qi Li and
+               Heng Ji and
+               Liang Huang},
+  title     = {Joint Event Extraction via Structured Prediction with Global Features},
+  booktitle = {Proceedings of the 51st Annual Meeting of the Association for Computational
+               Linguistics, {ACL} 2013, 4-9 August 2013, Sofia, Bulgaria, Volume
+               1: Long Papers},
+  pages     = {73--82},
+  year      = {2013},
+  crossref  = {DBLP:conf/acl/2013-1},
+  url       = {http://aclweb.org/anthology/P/P13/P13-1008.pdf},
+  timestamp = {Tue, 30 Jan 2018 09:13:52 +0100},
+  biburl    = {https://dblp.org/rec/bib/conf/acl/LiJH13},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@inproceedings{DBLP:conf/acl/FengHTJQL16,
+  author    = {Xiaocheng Feng and
+               Lifu Huang and
+               Duyu Tang and
+               Heng Ji and
+               Bing Qin and
+               Ting Liu},
+  title     = {A Language-Independent Neural Network for Event Detection},
+  booktitle = {Proceedings of the 54th Annual Meeting of the Association for Computational
+               Linguistics, {ACL} 2016, August 7-12, 2016, Berlin, Germany, Volume
+               2: Short Papers},
+  year      = {2016},
+  crossref  = {DBLP:conf/acl/2016-2},
+  url       = {http://aclweb.org/anthology/P/P16/P16-2011.pdf},
+  timestamp = {Tue, 16 Aug 2016 10:16:33 +0200},
+  biburl    = {https://dblp.org/rec/bib/conf/acl/FengHTJQL16},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+```
+
 ## Citations
 Later
