@@ -5,11 +5,10 @@ import sys
 import os
 import re
 from concrete.inspect import get_tokenizations, get_lemma_tags_for_tokenization, get_pos_tags_for_tokenization, \
-    get_tokentaggings_of_type, \
-    get_conll_head_tags_for_tokenization, penn_treebank_for_parse, get_ner_tags_for_tokenization
+    get_tokentaggings_of_type, get_conll_head_tags_for_tokenization, penn_treebank_for_parse
 from concrete.util import read_communication_from_file
 
-header_fields = [u"words", u"lemma", u"pos-tags", u"stanford-ner", u"chunk", u"conll-head"]
+header_fields = [u"words", u"lemma", u"pos-tags", u"chunk", u"conll-head", u"stanford-colcc"]
 
 
 def get_token_indices_for_entityMention(entityMention):
@@ -63,6 +62,17 @@ def get_tokens_for_entityMention(entityMention):
     return tokens
 
 
+def get_colcc_tags_for_tokenization(tokenization):
+    pos = -1
+    for i, x in enumerate(tokenization.dependencyParseList):
+        if x.metadata.tool == u'Stanford CoreNLP col-CC':
+            pos = i
+            break
+    if pos != -1:
+        return ["%s/dep=%d/gov=%d" % (x.edgeType, x.dep, x.gov) for x in
+                tokenization.dependencyParseList[pos].dependencyList]
+
+
 def comm2json(comm):
     js = []
 
@@ -81,8 +91,8 @@ def comm2json(comm):
                 tag_lists = get_chunk_tags_for_tokenization(tokenization)
             elif header == u"conll-head":
                 tag_lists = get_conll_head_tags_for_tokenization(tokenization)
-            elif header == u"stanford-ner":
-                tag_lists = get_ner_tags_for_tokenization(tokenization)
+            elif header == u"stanford-colcc":
+                tag_lists = get_colcc_tags_for_tokenization(tokenization)
             js[i][header] = tag_lists
 
         js[i][u"penn-treebank"] = re.sub(r'\s+', ' ', get_penn_treebank_for_tokenization(tokenization))
@@ -185,7 +195,8 @@ def main():
     in_path = args[1]
     out_path = args[2]
 
-    # in_path = "/mnt/d/MyProjects/AFP_ENG_20030616.0715.2.concrete"
+    # in_path = "/mnt/d/MyProjects/ACE2005/preprocess/ace-05-comms-ptb-anno-chunks/AFP_ENG_20030616.0715.concrete"
+    # in_path = "/mnt/d/MyProjects/AFP_ENG_20030616.0715.1.concrete"
     # out_path = "/mnt/d/MyProjects/AFP_ENG_20030616.0715.json"
 
     if not os.path.exists(in_path):
