@@ -39,10 +39,10 @@ APF_XML_FILES =$(notdir $(wildcard $(LDC2006T06_EN)/*/timex2norm/*.apf.xml))
 
 .PHONY: all
 all: 
-	$(info "This Makefile should be run once: 'make ace05splits'.) 
+	$(info "This Makefile should be run once: 'make ace05all'.)
 
 .PHONY: anno
-anno: ace05splits
+anno: ace05all
 
 # ----------------------------------------------------------------
 # Install (clone) concrete-chunklink from GitHub
@@ -118,8 +118,8 @@ ace05json: $(addprefix $(ACE05_JSON)/,$(subst .apf.xml,.json,$(APF_XML_FILES)))
 ace05brat: $(addprefix $(ACE05_BRAT)/,$(subst .apf.xml,.json.ann,$(APF_XML_FILES))) $(addprefix $(ACE05_BRAT)/,$(subst .apf.xml,.json.txt,$(APF_XML_FILES)))
 
 # All entrance
-.PHONY: ace05splits
-ace05splits: $(LDC2006T06) ace05brat
+.PHONY: ace05all
+ace05all: $(LDC2006T06) ace05brat
 
 # Don't delete intermediate files.
 .SECONDARY:

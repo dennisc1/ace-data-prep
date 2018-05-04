@@ -365,7 +365,7 @@ The words, entities, and events are given by the original ACE 2005 data.
 The lemmas, part-of-speech tags, labeled syntactic dependency parses, and constituency parses are automatically annotated by [Stanford CoreNLP](https://github.com/stanfordnlp/CoreNLP).
 The chunks are derived from the constituency parse using a [python wrapper](https://github.com/mgormley/concrete-chunklink) of the chunklink.pl script from CoNLL-2000.
 
-After executing ```make LDC_DIR=./LDC OUT_DIR=./output ace05splits``` (see details below), the output will consist of the following directories:
+After executing all commands (see details below), the output will consist of the following directories:
 
 * `LDC2006T06_temp_copy/`: A copy of the LDC input directory with DTD files placed appropriately.
 * `ace-05-comms/`: The ACE 2005 data converted to Concrete.
@@ -373,6 +373,7 @@ After executing ```make LDC_DIR=./LDC OUT_DIR=./output ace05splits``` (see detai
 * `ace-05-comms-ptb-anno-chunks/`: The ACE 2005 data converted to Concrete and annotated with Stanford CoreNLP and chunklink.pl.
 * `ace-05-json/`: The fully annotated data converted to Concatenated JSON.
 * `ace-05-brat/`: The fully annotated data converted to Brat Annotation.
+* `ace-05-splits/`: The train/test/dev data split of `ace-05-json/`.
 
 We recommend all users of this pipeline use the files in `ace-05-splits` for good.
 
@@ -393,7 +394,12 @@ The command below will convert the data to Concrete (with AceApf2Concrete), anno
 
     make LDC_DIR=<path to LDC dir> \
          OUT_DIR=<path for output dir> \
-         ace05splits
+         ace05all
+         
+## Split Data
+The command below will split the data in `<path for output dir>/ace-05-json/` and store the results into `<path for output dir>/ace-05-splits/`.
+
+    python qi_filelist/datasplit.py <path for output dir>/ace-05-json <path for output dir>/ace-05-splits  
 
 ## One More Step to Vistualize ACE2005 in Brat
 1. Copy the `ace-05-brat/` to a place under `$BRAT_ROOT$/data/`
