@@ -5,8 +5,8 @@
 #
 
 SHELL = /bin/bash
-# JAVAIN = export CLASSPATH=`mvn -f ./scripts/maven/pom-acex3.xml exec:exec -q -Dexec.executable="echo" -Dexec.args="%classpath"` && java
-JAVAIN = export CLASSPATH=`mvn -f /mnt/d/MyProjects/acex3/pom.xml exec:exec -q -Dexec.executable="echo" -Dexec.args="%classpath"` && java
+JAVAIN = export CLASSPATH=`mvn -f ./scripts/maven/pom-acex3.xml exec:exec -q -Dexec.executable="echo" -Dexec.args="%classpath"` && java
+#JAVAIN = export CLASSPATH=`mvn -f /mnt/d/MyProjects/acex3/pom.xml exec:exec -q -Dexec.executable="echo" -Dexec.args="%classpath"` && java
 JAVACS = export CLASSPATH=`mvn -f ./scripts/maven/pom-cs.xml exec:exec -q -Dexec.executable="echo" -Dexec.args="%classpath"` && java
 PYTHON = python
 CONCRETE_CHUNKLINK=./concrete-chunklink
